@@ -1,3 +1,5 @@
+import time
+
 import serial
 
 
@@ -5,10 +7,14 @@ def communicate_with_arduino(port, baud_rate, channel=print):
     arduino = None
     try:
         # Open the serial port
+        channel("Connecting")
         arduino = serial.Serial(port, baud_rate, timeout=2)
+        channel("Connected, waiting 5 seconds.")
+        time.sleep(5.0)
 
+        channel("Writing Start.")
         # Send the "Start" command
-        arduino.write(b"Start")
+        arduino.write(b"Start\n")
 
         # Read and print the response until "End" is received
         while True:
