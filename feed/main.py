@@ -1,9 +1,7 @@
-
-
 import serial
-import time
 
-def communicate_with_arduino(port, baud_rate):
+def communicate_with_arduino(port, baud_rate, channel=print):
+    arduino = None
     try:
         # Open the serial port
         arduino = serial.Serial(port, baud_rate, timeout=2)
@@ -20,14 +18,16 @@ def communicate_with_arduino(port, baud_rate):
                 break
 
     except Exception as e:
-        print(f"Error: {e}")
+        channel(f"Error: {e}")
     finally:
         # Close the serial port
-        if arduino.is_open:
+        if arduino is not None and arduino.is_open:
             arduino.close()
+
 
 def plugin(kernel, lifecycle):
     if lifecycle == "register":
+        @kernel.console_option('com_port', 'c', type=str, default="COM4")
         @kernel.console_command('feedmaterial', help="Feed Material.")
-        def example_cmd(command, channel, _, **kwargs):
-            communicate_with_arduino("COM4", 9600)
+        def example_cmd(command, channel, _, com_port="COM4", **kwargs):
+            communicate_with_arduino(com_port, 9600, channel=channel)
