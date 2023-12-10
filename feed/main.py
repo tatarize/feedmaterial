@@ -13,9 +13,9 @@ def communicate_with_arduino(port, baud_rate, channel=print):
         # Read and print the response until "End" is received
         while True:
             response = arduino.readline().decode("utf-8").strip()
-            print(response)
+            channel(response)
 
-            if response == "End":
+            if "End" in response:
                 break
 
     except Exception as e:
