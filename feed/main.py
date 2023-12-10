@@ -1,5 +1,6 @@
 import serial
 
+
 def communicate_with_arduino(port, baud_rate, channel=print):
     arduino = None
     try:
