@@ -1,5 +1,6 @@
 import time
 import serial
+from meerk40t.core.units import Length
 
 
 def plugin(kernel, lifecycle):
@@ -51,3 +52,14 @@ def plugin(kernel, lifecycle):
                 # Close the serial port
                 if arduino is not None and arduino.is_open:
                     arduino.close()
+
+        @kernel.console_argument("x", type=Length, default="x")
+        @kernel.console_argument("y", type=Length, default="y")
+        @kernel.console_command('goto_location', help="Goto this location.")
+        def goto_loc_cmd(channel, _, x=0, y=0, **kwargs):
+
+            kernel.elements.op_branch.add(
+                type="util goto",
+                x=x.mil,
+                y=y.mil,
+            )
