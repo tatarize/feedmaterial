@@ -46,6 +46,7 @@ def plugin(kernel, lifecycle):
 
             except Exception as e:
                 channel(f"Error: {e}")
+                kernel.console("estop\n")
             finally:
                 # Close the serial port
                 if arduino is not None and arduino.is_open:
